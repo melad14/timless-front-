@@ -8,7 +8,6 @@ import homeVisual from "../../assets/images/Home.png";
 import "./Home.css";
 
 export default function Home() {
-  const user = getStoredUser();
   const [message, setMessage] = useState("");
   const [openDate, setOpenDate] = useState("");
   const [recipients, setRecipients] = useState("");

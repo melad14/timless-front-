@@ -50,7 +50,7 @@ export default function AdminDashboard() {
                   <p><strong>Content:</strong> {c.content}</p>
                   {c.metadata?.rating > 0 && <p><strong>Rating:</strong> {c.metadata.rating} / 5</p>}
                   {c.metadata?.attachmentUrl && (
-                    <p><strong>Attachment:</strong> <a href="#">{c.metadata.attachmentUrl}</a></p>
+                    <p><strong>Attachment:</strong> <span className="attachment-link">{c.metadata.attachmentUrl}</span></p>
                   )}
                   <p><strong>Sender ID:</strong> {c.sender_id}</p>
                 </div>

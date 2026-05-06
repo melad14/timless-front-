@@ -252,7 +252,9 @@ export default function Messages() {
     setMobileView("detail");
   };
 
-  const currentMessages = selectedConvId ? messagesByConv[selectedConvId] || [] : [];
+  const currentMessages = useMemo(() => {
+    return selectedConvId ? messagesByConv[selectedConvId] || [] : [];
+  }, [selectedConvId, messagesByConv]);
   const selectedMessage = useMemo(() => {
     if (folder === FOLDER.FAVORITES && selectedFavoriteMsg) return selectedFavoriteMsg;
     if (!selectedMessageId) return null;

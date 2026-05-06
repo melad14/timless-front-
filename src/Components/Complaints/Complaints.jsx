@@ -33,8 +33,6 @@ export default function Complaints() {
   // UI States
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState({ type: "", text: "" });
-  const [complaintSubmitted, setComplaintSubmitted] = useState(false);
-  const [suggestionSubmitted, setSuggestionSubmitted] = useState(false);
 
   // Handle Complaint File Upload
   const handleComplaintFileUpload = async (e) => {
@@ -98,7 +96,6 @@ export default function Complaints() {
         setComplaintIssueType("");
         setComplaintDescription("");
         setComplaintAttachment(null);
-        setComplaintSubmitted(true);
       }, 1500);
     } catch (error) {
       setFeedback({ type: "error", text: error.message });
@@ -144,7 +141,6 @@ export default function Complaints() {
         setSuggestionContent("");
         setAllowContact(false);
         setSuggestionAttachment(null);
-        setSuggestionSubmitted(true);
       }, 1500);
     } catch (error) {
       setFeedback({ type: "error", text: error.message });
