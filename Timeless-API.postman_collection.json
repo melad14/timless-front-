@@ -1,0 +1,421 @@
+{
+  "info": {
+    "name": "Timeless API — Frontend",
+    "description": "مجموعة طلبات لربط الفرونت إند بخادم Timeless (FastAPI).\n\nبعد Login أو Signup انسخ access_token إلى المتغير accessToken.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "serverUrl", "value": "https://timeless-lemon.vercel.app" },
+    { "key": "baseUrl", "value": "https://timeless-lemon.vercel.app/api/v1" },
+    { "key": "accessToken", "value": "" },
+    { "key": "capsuleId", "value": "1" },
+    { "key": "userId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Root & Health",
+      "item": [
+        {
+          "name": "GET /",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{serverUrl}}/"
+          }
+        },
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{serverUrl}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST signup",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var j = pm.response.json();",
+                  "if (j.access_token) pm.collectionVariables.set('accessToken', j.access_token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"username\": \"testuser\",\n  \"password\": \"password12\",\n  \"phone_number\": \"+966500000000\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/signup"
+          }
+        },
+        {
+          "name": "POST login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var j = pm.response.json();",
+                  "if (j.access_token) pm.collectionVariables.set('accessToken', j.access_token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password12\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "GET /users/me",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/users/me"
+          }
+        },
+        {
+          "name": "PUT /users/me",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"new_username\",\n  \"phone_number\": \"+966511111111\"\n}"
+            },
+            "url": "{{baseUrl}}/users/me"
+          }
+        },
+        {
+          "name": "DELETE /users/me",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/users/me"
+          }
+        },
+        {
+          "name": "GET /users/{user_id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/users/{{userId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Time capsules",
+      "item": [
+        {
+          "name": "POST create",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"كبسولة تجريبية\",\n  \"content\": \"محتوى نصي يُرسل صافياً؛ الخادم يشفّره.\",\n  \"content_type\": \"text\",\n  \"open_date\": \"2027-06-01T12:00:00Z\"\n}"
+            },
+            "url": "{{baseUrl}}/time-capsules"
+          }
+        },
+        {
+          "name": "GET list mine",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/time-capsules?skip=0&limit=50"
+          }
+        },
+        {
+          "name": "GET pending",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/time-capsules/pending?skip=0&limit=50"
+          }
+        },
+        {
+          "name": "GET opened",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/time-capsules/opened?skip=0&limit=50"
+          }
+        },
+        {
+          "name": "GET by id",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/time-capsules/{{capsuleId}}"
+          }
+        },
+        {
+          "name": "PUT update",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"عنوان محدّث\"\n}"
+            },
+            "url": "{{baseUrl}}/time-capsules/{{capsuleId}}"
+          }
+        },
+        {
+          "name": "POST open",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/time-capsules/{{capsuleId}}/open"
+          }
+        },
+        {
+          "name": "DELETE",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/time-capsules/{{capsuleId}}"
+          }
+        },
+        {
+          "name": "POST check-ready (cron)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/time-capsules/check-ready"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Conversations",
+      "item": [
+        {
+          "name": "POST create conversation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"محادثة جديدة\",\n  \"member_ids\": [\"{{userId}}\"]\n}"
+            },
+            "url": "{{baseUrl}}/conversations"
+          }
+        },
+        {
+          "name": "GET conversations",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/conversations?skip=0&limit=50"
+          }
+        },
+        {
+          "name": "GET conversation by id",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/conversations/{{capsuleId}}"
+          }
+        },
+        {
+          "name": "PUT update conversation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"اسم جديد للمحادثة\"\n}"
+            },
+            "url": "{{baseUrl}}/conversations/{{capsuleId}}"
+          }
+        },
+        {
+          "name": "POST add member",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/conversations/{{capsuleId}}/members/{{userId}}"
+          }
+        },
+        {
+          "name": "DELETE remove member",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/conversations/{{capsuleId}}/members/{{userId}}"
+          }
+        },
+        {
+          "name": "DELETE conversation",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/conversations/{{capsuleId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Messages",
+      "item": [
+        {
+          "name": "POST send message",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversation_id\": \"{{capsuleId}}\",\n  \"content\": \"مرحبا\",\n  \"content_type\": \"text\"\n}"
+            },
+            "url": "{{baseUrl}}/messages"
+          }
+        },
+        {
+          "name": "GET message by id",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/messages/{{capsuleId}}"
+          }
+        },
+        {
+          "name": "PUT update message",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"محتوى محدّث\"\n}"
+            },
+            "url": "{{baseUrl}}/messages/{{capsuleId}}"
+          }
+        },
+        {
+          "name": "POST mark read",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/messages/{{capsuleId}}/read"
+          }
+        },
+        {
+          "name": "POST toggle favorite",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/messages/{{capsuleId}}/favorite"
+          }
+        },
+        {
+          "name": "DELETE message",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/messages/{{capsuleId}}"
+          }
+        },
+        {
+          "name": "GET conversation messages",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/messages/conversation/{{capsuleId}}?skip=0&limit=50"
+          }
+        },
+        {
+          "name": "GET favorite messages",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": "{{baseUrl}}/messages/user/favorites?skip=0&limit=50"
+          }
+        }
+      ]
+    }
+  ]
+}
