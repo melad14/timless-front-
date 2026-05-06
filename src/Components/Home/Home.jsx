@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createCapsule } from "../../services/capsuleService";
-import { isAuthenticated, getStoredUser } from "../../services/authService";
+import { isAuthenticated } from "../../services/authService";
 import { createConversation } from "../../services/conversationService";
 import { sendMessage } from "../../services/messageService";
 import homeVisual from "../../assets/images/Home.png";
