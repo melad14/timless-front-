@@ -32,13 +32,14 @@ export default function Profile() {
         setEmail(user.email || "");
         setPhoneNumber(user.phone_number || "");
       } catch {
-        if (storedUser) {
-          const fullName = storedUser.username?.trim() || "";
+        const user = getStoredUser();
+        if (user) {
+          const fullName = user.username?.trim() || "";
           const [first = "", ...rest] = fullName.split(" ");
           setFirstName(first);
           setLastName(rest.join(" "));
-          setEmail(storedUser.email || "");
-          setPhoneNumber(storedUser.phone_number || "");
+          setEmail(user.email || "");
+          setPhoneNumber(user.phone_number || "");
         }
       } finally {
         setLoading(false);
@@ -46,7 +47,7 @@ export default function Profile() {
     }
 
     loadProfile();
-  }, [storedUser]);
+  }, []); // Run only once on mount
 
   function handleGenderToggle(value) {
     setGender(value);
