@@ -587,7 +587,7 @@ export default function Messages() {
                 const preview = last?.content || "Open to load messages";
                 const cat = guessCategory(c.title, preview);
                 const dateLabel = last
-                  ? `Received : ${formatShortDate(last.created_at)}`
+                  ? `Delivers : ${formatShortDate(last.scheduled_at || last.created_at)}`
                   : "Tap to open";
                 const selected = String(selectedConvId) === String(c.id);
                 return (
@@ -649,7 +649,7 @@ export default function Messages() {
                       </div>
                       <div className="message-row-category">{cat}</div>
                       <div className="message-row-date">
-                        Delivers : {formatShortDate(row.message.created_at)}
+                        Delivers : {formatShortDate(row.message.scheduled_at || row.message.created_at)}
                       </div>
                     </div>
                     <button
