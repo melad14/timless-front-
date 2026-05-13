@@ -43,14 +43,25 @@ function guessCategory(title, content) {
   return "Message";
 }
 
+function ensureUTC(iso) {
+  if (!iso) return iso;
+  if (typeof iso !== "string") return iso;
+  // If it doesn't have Z or a timezone offset (+/-), append Z to treat it as UTC
+  if (!iso.includes("Z") && !/[+-]\d{2}:\d{2}$/.test(iso)) {
+    return `${iso}Z`;
+  }
+  return iso;
+}
+
 function formatShortDate(iso) {
   if (!iso) return "";
   try {
+    const date = new Date(ensureUTC(iso));
     return new Intl.DateTimeFormat("en-GB", {
       day: "numeric",
       month: "short",
       year: "numeric",
-    }).format(new Date(iso));
+    }).format(date);
   } catch {
     return "";
   }
@@ -59,13 +70,15 @@ function formatShortDate(iso) {
 function formatDateTime(iso) {
   if (!iso) return "";
   try {
+    const date = new Date(ensureUTC(iso));
     return new Intl.DateTimeFormat("en-GB", {
       day: "numeric",
       month: "short",
       year: "numeric",
       hour: "numeric",
       minute: "2-digit",
-    }).format(new Date(iso));
+      hour12: true, // Use 12-hour format for better readability
+    }).format(date);
   } catch {
     return "";
   }
@@ -464,6 +477,7 @@ export default function Messages() {
           conversation_id: conv.id,
           content: composeBody.trim(),
           content_type: "text",
+          scheduled_at: new Date(composeOpenDate).toISOString(),
         });
 
         await loadConversations();

@@ -69,6 +69,7 @@ export default function Home() {
           conversation_id: conv.id,
           content: message.trim(),
           content_type: "text",
+          scheduled_at: new Date(openDate).toISOString(),
         });
       } catch (e) {
         // If conversation creation fails, just log it (time capsule was already created)
