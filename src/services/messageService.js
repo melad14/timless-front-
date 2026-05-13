@@ -15,10 +15,10 @@ async function getMessage(id) {
   return request(`/messages/${id}`);
 }
 
-async function sendMessage({ conversation_id, content, content_type = "text" }) {
+async function sendMessage({ conversation_id, content, content_type = "text", scheduled_at = null }) {
   return request("/messages", {
     method: "POST",
-    body: JSON.stringify({ conversation_id, content, content_type }),
+    body: JSON.stringify({ conversation_id, content, content_type, scheduled_at }),
   });
 }
 
