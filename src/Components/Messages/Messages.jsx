@@ -175,6 +175,13 @@ export default function Messages() {
       } else if (folder === FOLDER.SENT) {
         await loadSent();
       }
+      
+      // Auto-trigger delivery check in background
+      try {
+        fetch(`${process.env.REACT_APP_API_URL || "https://timeless-lemon.vercel.app/api/v1"}/time-capsules/check-ready`, {
+          method: 'POST',
+        }).catch(() => {}); // Silent catch
+      } catch (e) { /* ignore */ }
     } catch (e) {
       setError(e.message || "Failed to load messages.");
     } finally {
