@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import logo from "../../assets/images/profile.jpg";
@@ -7,29 +8,38 @@ export default function Navbar() {
   const location = useLocation();
   const user = getStoredUser();
   const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+  const [isOpen, setIsOpen] = useState(false);
 
   if (isAuthPage) return null;
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
 
   return (
     <nav className="navbar navbar-expand-lg custom-navbar">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">
+        <Link className="navbar-brand" to="/" onClick={handleClose}>
           <span className="brand-icon">⌛</span> Timeless
         </Link>
 
         <button
           className="navbar-toggler"
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarContent"
+          onClick={handleToggle}
+          aria-expanded={isOpen}
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className="collapse navbar-collapse" id="navbarContent">
+        <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`} id="navbarContent">
           <ul className="navbar-nav mx-auto">
             <li className="nav-item">
-              <Link className={`nav-link ${location.pathname === "/" ? "active" : ""}`} to="/">
+              <Link className={`nav-link ${location.pathname === "/" ? "active" : ""}`} to="/" onClick={handleClose}>
                 Home
               </Link>
             </li>
@@ -37,12 +47,13 @@ export default function Navbar() {
               <Link
                 className={`nav-link ${location.pathname === "/messages" ? "active" : ""}`}
                 to="/messages"
+                onClick={handleClose}
               >
                 Message Box
               </Link>
             </li>
             <li className="nav-item">
-              <Link className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} to="/about">
+              <Link className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} to="/about" onClick={handleClose}>
                 About Us
               </Link>
             </li>
@@ -50,6 +61,7 @@ export default function Navbar() {
               <Link
                 className={`nav-link ${location.pathname === "/complaints" ? "active" : ""}`}
                 to="/complaints"
+                onClick={handleClose}
               >
                 Complaints & Suggestions
               </Link>
@@ -57,7 +69,7 @@ export default function Navbar() {
           </ul>
 
           <div className="profile-section">
-            <Link to="/profile" className="profile-link">
+            <Link to="/profile" className="profile-link" onClick={handleClose}>
               <img src={logo} alt="Profile" className="profile-img" />
               <span className="profile-name">{user?.username || "Guest User"}</span>
             </Link>
