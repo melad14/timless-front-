@@ -6,7 +6,7 @@ function buildCapsuleTitle(content) {
   return clean.length > 32 ? `${clean.slice(0, 32)}...` : clean;
 }
 
-async function createCapsule({ content, openDate, recipients }) {
+async function createCapsule({ content, openDate, recipients, recipients_phones }) {
   return request("/time-capsules", {
     method: "POST",
     body: JSON.stringify({
@@ -15,6 +15,7 @@ async function createCapsule({ content, openDate, recipients }) {
       content_type: "text",
       open_date: openDate,
       recipients: recipients || [],
+      recipients_phones: recipients_phones || [],
     }),
   });
 }

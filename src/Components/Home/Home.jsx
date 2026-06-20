@@ -43,18 +43,29 @@ export default function Home() {
       return;
     }
 
+    const recipientList = recipients
+      .split(",")
+      .map((email) => email.trim())
+      .filter((email) => email !== "");
+
+    const phoneList = mobileNumber
+      .split(",")
+      .map((phone) => phone.trim())
+      .filter((phone) => phone !== "");
+
+    if (recipientList.length === 0 && phoneList.length === 0) {
+      setFeedback({ type: "error", text: "Please provide at least one recipient email or mobile number." });
+      return;
+    }
+
     setLoading(true);
     try {
-      const recipientList = recipients
-        .split(",")
-        .map((email) => email.trim())
-        .filter((email) => email !== "");
-
       // Create time capsule
       await createCapsule({
         content: message.trim(),
         openDate: new Date(openDate).toISOString(),
         recipients: recipientList,
+        recipients_phones: phoneList,
       });
 
       // Also create conversation and message for Sent folder visibility
