@@ -452,19 +452,30 @@ export default function Messages() {
       return;
     }
 
+    const recipientList = composeRecipients
+      .split(",")
+      .map((email) => email.trim())
+      .filter((email) => email !== "");
+
+    const phoneList = composeMobileNumber
+      .split(",")
+      .map((phone) => phone.trim())
+      .filter((phone) => phone !== "");
+
+    if (recipientList.length === 0 && phoneList.length === 0) {
+      setError("Please provide at least one recipient email or mobile number.");
+      return;
+    }
+
     setComposeBusy(true);
     setError("");
     try {
-      const recipientList = composeRecipients
-        .split(",")
-        .map((email) => email.trim())
-        .filter((email) => email !== "");
-
       // Create time capsule
       await createCapsule({
         content: composeBody.trim(),
         openDate: new Date(composeOpenDate).toISOString(),
         recipients: recipientList,
+        recipients_phones: phoneList,
       });
 
       // Also create conversation and message for history
