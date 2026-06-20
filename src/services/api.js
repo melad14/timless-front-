@@ -62,7 +62,19 @@ async function request(path, options = {}) {
     if (response.status === 401) {
       clearAuthSession();
     }
-    const message = data?.detail || data?.message || "Request failed";
+    let message = "Request failed";
+    if (data?.detail) {
+      if (typeof data.detail === "string") {
+        message = data.detail;
+      } else if (Array.isArray(data.detail) && data.detail.length > 0) {
+        message = data.detail[0]?.msg || "Validation error";
+        if (message.startsWith("Value error, ")) {
+          message = message.substring("Value error, ".length);
+        }
+      }
+    } else if (data?.message) {
+      message = data.message;
+    }
     console.error('API Error:', message);
     throw new Error(message);
   }
