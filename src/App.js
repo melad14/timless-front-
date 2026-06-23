@@ -26,6 +26,14 @@ function AdminRoute({ children }) {
   return isAuthenticated() && user?.is_admin ? children : <Navigate to="/" replace />;
 }
 
+function HomeOrAdminRoute() {
+  const user = getStoredUser();
+  if (user?.is_admin) {
+    return <Navigate to="/admin/complaints" replace />;
+  }
+  return <Home />;
+}
+
 let router = createBrowserRouter([
   {
     path: '/',
@@ -35,7 +43,7 @@ let router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedRoute>
-            <Home />
+            <HomeOrAdminRoute />
           </ProtectedRoute>
         ),
       },
