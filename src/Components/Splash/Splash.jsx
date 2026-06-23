@@ -44,8 +44,11 @@ export default function Splash() {
       {/* Slide 1: Open Envelope */}
       {slide === 1 && (
         <div className="slide slide-envelope" onClick={handleNext}>
-          <div className="envelope-wrapper">
+          <div className="envelope-wrapper relative-wrapper">
             <img src={splash2} alt="Envelope Open" className="envelope-img animate-envelope" />
+            <div className="envelope-text animate-fade-in">
+              Time kept this<br />message safe for you
+            </div>
           </div>
           <button className="nav-arrow" onClick={(e) => { e.stopPropagation(); handleNext(); }}>
             <span className="arrow-icon">➔</span>

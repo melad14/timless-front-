@@ -39,6 +39,25 @@
   transition: transform 0.3s ease;
 }
 
+.relative-wrapper {
+  position: relative;
+}
+
+.envelope-text {
+  position: absolute;
+  top: 34%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Irish Grover', cursive;
+  font-size: 2.2rem;
+  color: #191919;
+  text-align: center;
+  line-height: 1.1;
+  width: 65%;
+  font-weight: 400;
+  pointer-events: none;
+}
+
 .envelope-wrapper:hover {
   transform: scale(1.02);
 }
@@ -329,6 +348,12 @@
 
 /* Media Queries */
 @media (max-width: 991px) {
+  .envelope-text {
+    font-size: 1.3rem;
+    width: 60%;
+    top: 34%;
+  }
+
   .grid-2 {
     grid-template-columns: 1fr;
     gap: 40px;
