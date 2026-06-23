@@ -47,7 +47,7 @@ export default function Splash() {
           <div className="envelope-wrapper">
             <div className="relative-wrapper">
               <img src={splash2} alt="Envelope Open" className="envelope-img animate-envelope" />
-              <div className="envelope-text animate-fade-in">
+              <div className="envelope-text animate-envelope-text">
                 Time kept this<br />message safe for you
               </div>
             </div>
