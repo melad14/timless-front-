@@ -45,11 +45,9 @@ export default function Splash() {
       {slide === 1 && (
         <div className="slide slide-envelope" onClick={handleNext}>
           <div className="envelope-wrapper">
-            <div className="relative-wrapper">
-              <img src={splash2} alt="Envelope Open" className="envelope-img animate-envelope" />
-              <div className="envelope-text animate-envelope-text">
-                Time kept this<br />message safe for you
-              </div>
+            <img src={splash2} alt="Envelope Open" className="envelope-img animate-envelope" />
+            <div className="envelope-text animate-envelope-text">
+              Time kept this<br />message safe for you
             </div>
           </div>
           <button className="nav-arrow" onClick={(e) => { e.stopPropagation(); handleNext(); }}>
@@ -98,21 +96,21 @@ export default function Splash() {
             <div className="steps-container grid-3">
               <div className="step-card animate-fade-in delay-1">
                 <div className="img-container">
-                  <img src={handImg} alt="Log In" className="step-img" />
+                  <img src={handImg} alt="Write Message" className="step-img" />
                 </div>
-                <p className="step-desc">1. Log In Or Create Account</p>
+                <p className="step-desc">1. Write Your Message Or Make A Video</p>
               </div>
               <div className="step-card animate-fade-in delay-2">
                 <div className="img-container">
-                  <img src={rocketImg} alt="Leave Message" className="step-img" />
+                  <img src={calendarImg} alt="Choose A Date" className="step-img" />
                 </div>
-                <p className="step-desc">2. Leave Your Message</p>
+                <p className="step-desc">2. Choose A Date</p>
               </div>
               <div className="step-card animate-fade-in delay-3">
                 <div className="img-container">
-                  <img src={calendarImg} alt="Choose Date" className="step-img" />
+                  <img src={rocketImg} alt="Leave The Rest" className="step-img" />
                 </div>
-                <p className="step-desc">3. Choose Date & Recipient Details</p>
+                <p className="step-desc">3. Leave The Rest To Us</p>
               </div>
             </div>
             <div className="btn-footer animate-fade-in delay-4">
