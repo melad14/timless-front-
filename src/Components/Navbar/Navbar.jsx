@@ -66,6 +66,17 @@ export default function Navbar() {
                 Complaints & Suggestions
               </Link>
             </li>
+            {user?.is_admin && (
+              <li className="nav-item">
+                <Link
+                  className={`nav-link ${location.pathname === "/admin/complaints" ? "active" : ""}`}
+                  to="/admin/complaints"
+                  onClick={handleClose}
+                >
+                  لوحة الشكاوي
+                </Link>
+              </li>
+            )}
           </ul>
 
           <div className="profile-section">
