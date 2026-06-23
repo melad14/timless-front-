@@ -7,7 +7,7 @@ import { getStoredUser } from "../../services/authService";
 export default function Navbar() {
   const location = useLocation();
   const user = getStoredUser();
-  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/splash";
   const [isOpen, setIsOpen] = useState(false);
 
   if (isAuthPage) return null;

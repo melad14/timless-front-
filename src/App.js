@@ -11,10 +11,15 @@ import Profile from './Components/Profile/Profile';
 import Complaints from './Components/Complaints/Complaints';
 import AdminDashboard from './Components/Admin/AdminDashboard';
 import CapsuleView from './Components/CapsuleView/CapsuleView';
+import Splash from './Components/Splash/Splash';
 import { isAuthenticated, getStoredUser } from './services/authService';
 
 function ProtectedRoute({ children }) {
-  return isAuthenticated() ? children : <Navigate to="/login" replace />;
+  if (isAuthenticated()) {
+    return children;
+  }
+  const hasSeenSplash = localStorage.getItem('splashSeen');
+  return hasSeenSplash ? <Navigate to="/login" replace /> : <Navigate to="/splash" replace />;
 }
 
 function InverseProtectedRoute({ children }) {
@@ -46,6 +51,10 @@ let router = createBrowserRouter([
             <HomeOrAdminRoute />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: 'splash',
+        element: <Splash />,
       },
       {
         path: 'about',
