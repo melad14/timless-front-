@@ -41,19 +41,21 @@
 
 .relative-wrapper {
   position: relative;
+  width: 100%;
+  display: block;
 }
 
 .envelope-text {
   position: absolute;
-  top: 34%;
+  top: 36%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: 'Irish Grover', cursive;
-  font-size: 2.2rem;
+  font-size: 2.1rem;
   color: #191919;
   text-align: center;
   line-height: 1.1;
-  width: 65%;
+  width: 60%;
   font-weight: 400;
   pointer-events: none;
 }
@@ -63,6 +65,7 @@
 }
 
 .envelope-img {
+  display: block;
   width: 100%;
   height: auto;
   border-radius: 12px;
