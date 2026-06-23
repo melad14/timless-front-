@@ -5,7 +5,7 @@ import './Splash.css';
 // Import images
 import splash1 from '../../assets/images/splash 1.jpeg';
 import splash2 from '../../assets/images/splash 2.jpeg';
-import chestImg from '../../assets/images/Splash.png';
+import chestImg from '../../assets/images/box.jpeg';
 import handImg from '../../assets/images/hand.jpeg';
 import calendarImg from '../../assets/images/calender.jpeg';
 import rocketImg from '../../assets/images/rocket.jpeg';
@@ -36,7 +36,7 @@ export default function Splash() {
             <img src={splash1} alt="Envelope Closed" className="envelope-img animate-envelope" />
           </div>
           <button className="nav-arrow" onClick={(e) => { e.stopPropagation(); handleNext(); }}>
-            <span className="arrow-icon">➔</span>
+            <span className="arrow-icon">&gt;</span>
           </button>
         </div>
       )}
@@ -51,7 +51,7 @@ export default function Splash() {
             </div>
           </div>
           <button className="nav-arrow" onClick={(e) => { e.stopPropagation(); handleNext(); }}>
-            <span className="arrow-icon">➔</span>
+            <span className="arrow-icon">&gt;</span>
           </button>
         </div>
       )}
