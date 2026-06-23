@@ -93,4 +93,62 @@ async function uploadAttachment(file) {
   };
 }
 
-export { submitComplaint, uploadAttachment };
+/**
+ * Fetch all complaints/suggestions conversations for the current user
+ * @returns {Promise<Array>} - List of complaint conversations
+ */
+async function getUserComplaints() {
+  try {
+    const conversations = await request("/conversations");
+    return conversations.filter(
+      (conv) =>
+        conv.title.startsWith("⚠️ Complaint") ||
+        conv.title.startsWith("💡 Suggestion")
+    );
+  } catch (error) {
+    throw new Error(error.message || "Failed to load user complaints");
+  }
+}
+
+/**
+ * Fetch all messages for a specific conversation
+ * @param {string} conversationId - The conversation ID
+ * @returns {Promise<Array>} - List of messages
+ */
+async function getComplaintMessages(conversationId) {
+  try {
+    return await request(`/messages/conversation/${conversationId}`);
+  } catch (error) {
+    throw new Error(error.message || "Failed to fetch conversation messages");
+  }
+}
+
+/**
+ * Reply to a complaint conversation
+ * @param {string} conversationId - The conversation ID
+ * @param {string} content - The reply message content
+ * @returns {Promise<Object>} - Created message
+ */
+async function replyToComplaint(conversationId, content) {
+  if (!content?.trim()) {
+    throw new Error("Reply content cannot be empty");
+  }
+
+  try {
+    return await request("/messages", {
+      method: "POST",
+      body: JSON.stringify({
+        conversation_id: conversationId,
+        content: content,
+        content_type: "text",
+        metadata: {
+          submittedAt: new Date().toISOString(),
+        },
+      }),
+    });
+  } catch (error) {
+    throw new Error(error.message || "Failed to submit reply");
+  }
+}
+
+export { submitComplaint, uploadAttachment, getUserComplaints, getComplaintMessages, replyToComplaint };

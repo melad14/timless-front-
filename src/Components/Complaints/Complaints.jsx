@@ -1,6 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Complaints.css";
-import { submitComplaint, uploadAttachment } from "../../services/complaintService";
+import {
+  submitComplaint,
+  uploadAttachment,
+  getUserComplaints,
+  getComplaintMessages,
+  replyToComplaint
+} from "../../services/complaintService";
+import { getStoredUser } from "../../services/api";
 
 const ISSUE_TYPES = [
   { value: "general", label: "General Issue" },
@@ -19,6 +26,61 @@ const SUGGESTION_RATING = [
 ];
 
 export default function Complaints() {
+  // Ticket history & Chat states
+  const [userTickets, setUserTickets] = useState([]);
+  const [selectedTicket, setSelectedTicket] = useState(null);
+  const [ticketMessages, setTicketMessages] = useState([]);
+  const [messagesLoading, setMessagesLoading] = useState(false);
+  const [replyText, setReplyText] = useState("");
+  const [replying, setReplying] = useState(false);
+
+  useEffect(() => {
+    fetchUserTickets();
+  }, []);
+
+  const fetchUserTickets = async () => {
+    try {
+      const tickets = await getUserComplaints();
+      setUserTickets(tickets);
+    } catch (error) {
+      console.error("Failed to load tickets:", error);
+    }
+  };
+
+  const handleSelectTicket = async (ticket) => {
+    setSelectedTicket(ticket);
+    setReplyText("");
+    await fetchTicketMessages(ticket.id);
+  };
+
+  const fetchTicketMessages = async (ticketId) => {
+    try {
+      setMessagesLoading(true);
+      const msgs = await getComplaintMessages(ticketId);
+      setTicketMessages(msgs);
+    } catch (error) {
+      console.error("Failed to load chat messages:", error);
+    } finally {
+      setMessagesLoading(false);
+    }
+  };
+
+  const handleSendTicketReply = async (e) => {
+    e.preventDefault();
+    if (!replyText.trim() || replying) return;
+
+    try {
+      setReplying(true);
+      await replyToComplaint(selectedTicket.id, replyText);
+      setReplyText("");
+      await fetchTicketMessages(selectedTicket.id);
+    } catch (error) {
+      setFeedback({ type: "error", text: error.message || "Failed to send message" });
+    } finally {
+      setReplying(false);
+    }
+  };
+
   // Complaints Tab
   const [complaintIssueType, setComplaintIssueType] = useState("");
   const [complaintDescription, setComplaintDescription] = useState("");
@@ -91,6 +153,8 @@ export default function Complaints() {
         text: "Thank you! We've received your complaint and will get back to you soon.",
       });
 
+      fetchUserTickets();
+
       // Reset form
       setTimeout(() => {
         setComplaintIssueType("");
@@ -134,6 +198,8 @@ export default function Complaints() {
         type: "success",
         text: "Thank you for your suggestion! We appreciate your feedback.",
       });
+
+      fetchUserTickets();
 
       // Reset form
       setTimeout(() => {
@@ -309,6 +375,83 @@ export default function Complaints() {
         <p className="review-subtitle">
           We value your feedback. Let us know what you think about Timeless!
         </p>
+      </section>
+
+      {/* My Tickets Section */}
+      <section className="tickets-section">
+        <h3 className="tickets-title">تذاكري السابقة والردود (My Tickets & Chats)</h3>
+        
+        <div className="tickets-layout">
+          <div className="tickets-list-side">
+            {userTickets.length === 0 ? (
+              <p className="no-tickets-text">لا توجد لديك تذاكر أو شكاوى سابقة.</p>
+            ) : (
+              <div className="tickets-grid">
+                {userTickets.map((ticket) => (
+                  <div
+                    key={ticket.id}
+                    className={`ticket-history-card ${selectedTicket?.id === ticket.id ? "active-ticket" : ""}`}
+                    onClick={() => handleSelectTicket(ticket)}
+                  >
+                    <div className="ticket-card-header">
+                      <span className="ticket-badge">{ticket.title.startsWith("💡") ? "💡 اقتراح" : "⚠️ شكوى"}</span>
+                      <span className="ticket-date">{new Date(ticket.created_at).toLocaleDateString("ar-EG")}</span>
+                    </div>
+                    <p className="ticket-title-text">{ticket.title}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {selectedTicket && (
+            <div className="ticket-chat-side">
+              <div className="ticket-chat-header">
+                <h4>محادثة التذكرة: {selectedTicket.title}</h4>
+                <button className="close-chat-btn" onClick={() => setSelectedTicket(null)}>✕ إغلاق</button>
+              </div>
+
+              <div className="ticket-messages-box">
+                {messagesLoading ? (
+                  <div className="chat-loading-text">جاري تحميل الرسائل...</div>
+                ) : (
+                  <div className="ticket-messages-list">
+                    {ticketMessages.map((msg, idx) => {
+                      const currentUser = getStoredUser();
+                      const isMe = msg.sender_id === currentUser?.id;
+                      return (
+                        <div
+                          key={msg.id || idx}
+                          className={`user-msg-bubble ${isMe ? "me-bubble" : "support-bubble"}`}
+                        >
+                          <div className="msg-bubble-sender">{isMe ? "أنت" : "الدعم الفني"}</div>
+                          <div className="msg-bubble-content">{msg.content}</div>
+                          <div className="msg-bubble-time">
+                            {new Date(msg.created_at).toLocaleTimeString("ar-EG")}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              <form onSubmit={handleSendTicketReply} className="ticket-reply-form">
+                <input
+                  type="text"
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  placeholder="اكتب ردك هنا للدعم الفني..."
+                  disabled={replying}
+                  required
+                />
+                <button type="submit" disabled={replying || !replyText.trim()}>
+                  {replying ? "جاري..." : "إرسال"}
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
       </section>
     </main>
   );
